@@ -7,14 +7,14 @@
 defineNeighborhoods(annot.list)
 }
 \arguments{
-\item{annot.list}{A list of annotated spatial networks (output of \code{annotateSpatialNetwork} loop).}
+\item{annot.list}{A list of annotated spatial networks (output of `annotateSpatialNetwork` loop).}
 }
 \value{
 A list containing:
 \itemize{
-\item \code{prop.table}: List of data.tables (one per sample) with neighbor proportions.
-\item \code{raw.table}: List of raw count matrices.
-\item \code{list_ID}: Vector of sample IDs.
+  \item \code{prop.table}: List of data.tables (one per sample) with neighbor proportions.
+  \item \code{raw.table}: List of raw count matrices.
+  \item \code{list_ID}: Vector of sample IDs.
 }
 }
 \description{

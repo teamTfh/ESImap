@@ -7,7 +7,7 @@
 plotInteractionEffectSizes(df, condition.exp, condition.ctrl)
 }
 \arguments{
-\item{df}{Data.table output from \code{calculateInteractionEffectSizes}.}
+\item{df}{Data.table output from `calculateInteractionEffectSizes`.}
 
 \item{condition.exp}{Label for experimental condition.}
 
@@ -17,5 +17,5 @@ plotInteractionEffectSizes(df, condition.exp, condition.ctrl)
 A ggplot object.
 }
 \description{
-Visualizes the output of \code{calculateInteractionEffectSizes} as a bar chart.
+Visualizes the output of `calculateInteractionEffectSizes` as a bar chart.
 }

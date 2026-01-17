@@ -27,5 +27,5 @@ plotAverageNicheIgraph(
 A ggraph object.
 }
 \description{
-Visualizes the top neighbors of a specific cell type as a star-like network graph using \code{ggraph}.
+Visualizes the top neighbors of a specific cell type as a star-like network graph using `ggraph`.
 }

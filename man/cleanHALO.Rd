@@ -14,9 +14,9 @@ cleanHALO(halo.obj, label = paste0(sample(letters, 5, T), collapse = ""))
 \value{
 A list containing:
 \itemize{
-\item \code{expr}: Matrix of expression values.
-\item \code{metadata}: data.table of cell metadata.
-\item \code{locations}: data.table of X/Y coordinates.
+  \item \code{expr}: Matrix of expression values.
+  \item \code{metadata}: data.table of cell metadata.
+  \item \code{locations}: data.table of X/Y coordinates.
 }
 }
 \description{

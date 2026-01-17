@@ -16,7 +16,7 @@ plotNeighborHistogram(
 \arguments{
 \item{gobject}{A Giotto object.}
 
-\item{neighborhood_prop_table}{Data.table from \code{defineNeighborhoods} (one sample).}
+\item{neighborhood_prop_table}{Data.table from `defineNeighborhoods` (one sample).}
 
 \item{target_cluster}{The cell type of the "center" cell.}
 

@@ -26,8 +26,8 @@ cellProx.calcP(
 \value{
 A list containing:
 \itemize{
-\item \code{raw_sim_table}: The input table.
-\item \code{enrichm_res}: Data.table with enrichment scores (log2FC) and adjusted p-values.
+  \item \code{raw_sim_table}: The input table.
+  \item \code{enrichm_res}: Data.table with enrichment scores (log2FC) and adjusted p-values.
 }
 }
 \description{

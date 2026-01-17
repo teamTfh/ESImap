@@ -30,7 +30,7 @@ nicheContrast(
 \item{color_vector}{Named character vector of colors.}
 }
 \value{
-A list containing the ggplot object (\code{scatterplot}) and the data table (\code{res}).
+A list containing the ggplot object (`scatterplot`) and the data table (`res`).
 }
 \description{
 visualizes the difference in niche composition for a specific cell type between two experimental groups.

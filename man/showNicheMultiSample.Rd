@@ -13,7 +13,7 @@ showNicheMultiSample(
 )
 }
 \arguments{
-\item{annot.list}{A list of annotated spatial network tables (output of \code{annotateSpatialNetwork}).}
+\item{annot.list}{A list of annotated spatial network tables (output of `annotateSpatialNetwork`).}
 
 \item{indexCluster}{Character string. The "center" cell type.}
 

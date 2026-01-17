@@ -7,7 +7,7 @@
 cellProx.subgroup(dt, number_of_simulations = 200)
 }
 \arguments{
-\item{dt}{A data.table containing combined simulation results from multiple samples (must have \code{id}, \code{unified_int}, \code{round}, \code{V1} columns).}
+\item{dt}{A data.table containing combined simulation results from multiple samples (must have `id`, `unified_int`, `round`, `V1` columns).}
 
 \item{number_of_simulations}{Integer.}
 }

@@ -13,7 +13,7 @@ calculateInteractionEffectSizes(
 )
 }
 \arguments{
-\item{interaction.dt}{A data.table containing enrichment results (output of \code{cellProx.subgroup} for multiple samples). Must have \code{condition}, \code{enrichm}, \code{unified_int}.}
+\item{interaction.dt}{A data.table containing enrichment results (output of `cellProx.subgroup` for multiple samples). Must have `condition`, `enrichm`, `unified_int`.}
 
 \item{condition.exp}{Experimental condition string (e.g. "stage3").}
 

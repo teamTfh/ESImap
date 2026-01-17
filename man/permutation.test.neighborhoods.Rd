@@ -12,7 +12,7 @@ permutation.test.neighborhoods(
 )
 }
 \arguments{
-\item{data.tbl}{A data.table with columns \code{source} (group label) and \code{data} (expression value).}
+\item{data.tbl}{A data.table with columns `source` (group label) and `data` (expression value).}
 
 \item{group.0}{Label for the first group (e.g., "No.Neighbors").}
 

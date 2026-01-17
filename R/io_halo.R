@@ -1,49 +1,122 @@
 
 
+#' Clean HALO Data
+#'
+#' Parses a raw HALO data object, extracting expression data, metadata, and spatial locations.
+#'
+#' @param halo.obj A data.frame or data.table read from a HALO csv file.
+#' @param label A character string to prefix cell IDs. Defaults to a random 5-letter string.
+#'
+#' @return A list containing:
+#' \itemize{
+#'   \item \code{expr}: Matrix of expression values.
+#'   \item \code{metadata}: data.table of cell metadata.
+#'   \item \code{locations}: data.table of X/Y coordinates.
+#' }
+#' @import data.table
+#' @export
 cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""))
-{  # load in a halo object, make a unique column via a random string of 5 letters if no label supplied
-  # halo.obj <- inputFile
-  expr <- data.frame();   metadata <- data.table(); locations <- data.table()
-  setnames(halo.obj, names(halo.obj), gsub(" ", ".", names(halo.obj)))
-  cellIntensity <- grep("Cell.Intensity", names(halo.obj), value=T)
-  expr <- halo.obj[, which(colnames(halo.obj) %in% cellIntensity)]  # save the Cell.Intensity columns as expression
-  names(expr) <- gsub("\\.Cell.Intensity$","",names(expr))  # remove the words ".Cell.Intensity" from columns
+{  
+  # Ensure input is a data.table
+  if (!data.table::is.data.table(halo.obj)) {   data.table::setDT(halo.obj)   }
+  
+  # Clean column names
+  data.table::setnames(halo.obj, names(halo.obj), gsub(" ", ".", names(halo.obj)))
+  
+  # Extract Expression Data
+  cellIntensity <- grep("Cell.Intensity", names(halo.obj), value = TRUE)
+  expr <- halo.obj[, .SD, .SDcols = cellIntensity]
+  names(expr) <- gsub("\\.Cell.Intensity$", "", names(expr))
   rownames(expr) <- paste0(label, "_", halo.obj$Object.Id)
-  locations$x <- rowMeans(halo.obj[,c('XMax', 'XMin')]);   locations$y <- rowMeans(halo.obj[,c('YMax', 'YMin')])
   
-  saveColumns <- c(colnames(halo.obj)[grep('Object.Id', colnames(halo.obj), value=F)],
-                   colnames(halo.obj)[grep('Classifier.Label', colnames(halo.obj), value=F)],
-                   colnames(halo.obj)[grep("Positive.Classification$", colnames(halo.obj), value=F)], 
-                   colnames(halo.obj)[9:17])
-  metadata <- halo.obj[, saveColumns]
-  metadata$cellID <- paste0(label, "_", halo.obj$Object.Id)
-  metadata$cellArea <- halo.obj$Cell.Area..µm..
-  metadata$x <- locations$x;   metadata$y <- locations$y
+  # Extract Locations
+  locations <- data.table::data.table(
+    x = rowMeans(halo.obj[, c('XMax', 'XMin'), with = FALSE]),
+    y = rowMeans(halo.obj[, c('YMax', 'YMin'), with = FALSE])
+  )
   
-  metadata[metadata == "NaN"] <- 0
-  return(out <- list(expr = t(expr), metadata = metadata, locations = locations))
+  # Extract Metadata
+  # Note: 9:17 is specific to your file structure; ensure this is consistent across files
+  saveColumns <- c(
+    grep('Object.Id', colnames(halo.obj), value = TRUE),
+    grep('Classifier.Label', colnames(halo.obj), value = TRUE),
+    grep("Positive.Classification$", colnames(halo.obj), value = TRUE),
+    colnames(halo.obj)[9:17] 
+  )
+  
+  metadata <- halo.obj[, .SD, .SDcols = saveColumns]
+  metadata[, cellID := paste0(label, "_", Object.Id)]
+  metadata[, cellArea := `Cell.Area..µm..`]
+  metadata[, x := locations$x]
+  metadata[, y := locations$y]
+  
+  # Clean NaNs
+  for (j in seq_len(ncol(metadata))) {
+    set(metadata, which(is.nan(metadata[[j]])), j, 0)
+  }
+  
+  return(list(expr = t(expr), metadata = metadata, locations = locations))
 }
 
 
-makeGiottoObject <- function(inputFile, label=sample.name)
+
+
+#' Create and Normalize Giotto Object from HALO Data
+#'
+#' Wraps the cleaning, creation, filtering, and normalization steps into one pipeline.
+#'
+#' @param inputFile A raw data.table or data.frame from HALO.
+#' @param label A character string for the sample name.
+#' @param instructions A list of Giotto instructions (created via \code{Giotto::createGiottoInstructions}).
+#'
+#' @return A processed Giotto object.
+#' @import Giotto
+#' @export
+makeGiottoObject <- function(inputFile, label, instructions=NULL)
 {
+  # 1. Clean the HALO data
   out <- cleanHALO(inputFile, label)
-  print(paste0("Making the Giotto object for ", label))
-  sln <- createGiottoObject(expression = out$expr,  spatial_locs = out$locations, instructions = instructions)
-  print("Adding cell metadata"); # gc()  
-  sln <- addCellMetadata(sln, new_metadata = out$metadata, by_column = TRUE, column_cell_ID = "cellID" )
-  cell_metadata <- pDataDT(sln) # pull metadata out into new object
   
-  #filter out undesirable cells
+  message(paste0("Making the Giotto object for ", label))
+  
+  # 2. Create Object
+  # Note: using Giotto:: prefix to ensure the package finds the function
+  sln <- Giotto::createGiottoObject(
+    expression = out$expr,
+    spatial_locs = out$locations,
+    instructions = instructions
+  )
+  
+  message("Adding cell metadata")
+  sln <- Giotto::addCellMetadata(
+    sln,
+    new_metadata = out$metadata,
+    by_column = TRUE,
+    column_cell_ID = "cellID"
+  )
+  
+  # 3. Filter
+  cell_metadata <- Giotto::pDataDT(sln)
   keepID <- cell_metadata[Classifier.Label != "Background" & Classifier.Label != "Artifact", ]$cell_ID
-  sln <- subsetGiotto(sln, cell_ids = keepID)
+  sln <- Giotto::subsetGiotto(sln, cell_ids = keepID)
   
-  print("Starting normalization")
-  sln <- normalizeGiotto(gobject = sln, scalefactor = 6000, norm_methods = "standard",
-                         verbose = TRUE, log_norm = FALSE, library_size_norm = FALSE,
-                         scale_genes = FALSE, scale_cells = TRUE)
-  print("Finished normalization")
-  sln <- addStatistics(gobject = sln, expression_values = "normalized")
+  # 4. Normalize
+  message("Starting normalization")
+  sln <- Giotto::normalizeGiotto(
+    gobject = sln,
+    scalefactor = 6000,
+    norm_methods = "standard",
+    verbose = TRUE,
+    log_norm = FALSE,
+    library_size_norm = FALSE,
+    scale_genes = FALSE,
+    scale_cells = TRUE
+  )
+  message("Finished normalization")
+  
+  sln <- Giotto::addStatistics(gobject = sln, expression_values = "normalized")
+  
   return(sln)
 }
+
 

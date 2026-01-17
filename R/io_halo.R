@@ -1,6 +1,5 @@
 
 
-
 cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""))
 {  # load in a halo object, make a unique column via a random string of 5 letters if no label supplied
   # halo.obj <- inputFile

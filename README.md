@@ -20,7 +20,7 @@ You can install the development version of ESImap from GitHub:
 
 ```r
 # install.packages("devtools")
-devtools::install_github("raminherati/ESImap")
+devtools::install_github("teamTfh/ESImap")
 ```
 
 ## Dependencies

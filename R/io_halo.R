@@ -36,6 +36,7 @@ cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = "
   )
 
   # Extract Metadata
+  saveColumns <-   gsub(" ", ".", saveColumns)
   metadata <- halo.obj[, .SD, .SDcols = saveColumns]
   metadata[, cellID := paste0(label, "_", Object.Id)]
   metadata[, x := locations$x]
@@ -63,10 +64,10 @@ cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = "
 #' @return A processed Giotto object.
 #' @import Giotto
 #' @export
-makeGiottoObject <- function(inputFile, label, instructions=NULL)
+makeGiottoObject <- function(inputData, label, instructions=NULL)
 {
   # 1. Clean the HALO data
-  out <- cleanHALO(inputFile, label)
+  out <- inputData
 
   message(paste0("Making the Giotto object for ", label))
 

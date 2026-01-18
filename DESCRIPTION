@@ -22,11 +22,12 @@ Imports:
     ggrepel,
     gridExtra,
     stats
+Remotes: 
+    github::drieslab/Giotto
 Suggests: 
     knitr,
     rmarkdown,
     devtools,
     usethis
 VignetteBuilder: knitr
-Remotes: 
-    github::drieslab/Giotto
+

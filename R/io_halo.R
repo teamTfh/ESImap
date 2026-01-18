@@ -16,7 +16,7 @@
 #' }
 #' @import data.table
 #' @export
-cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""), saveColumns)
+cleanHALO.broken <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""), saveColumns)
 {
   # Ensure input is a data.table
   if (!data.table::is.data.table(halo.obj)) {   data.table::setDT(halo.obj)   }
@@ -26,7 +26,7 @@ cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = "
 
   # Extract Expression Data
   cellIntensity <- grep("Cell.Intensity", names(halo.obj), value = TRUE)
-  expr <- halo.obj[, .SD, .SDcols = cellIntensity]
+  expr <- setDF(halo.obj[, .SD, .SDcols = cellIntensity])
   names(expr) <- gsub("\\.Cell.Intensity$", "", names(expr))
   rownames(expr) <- paste0(label, "_", halo.obj$Object.Id)
 
@@ -65,28 +65,18 @@ cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = "
 #' @return A processed Giotto object.
 #' @import Giotto
 #' @export
-makeGiottoObject <- function(inputData, label, instructions=NULL)
+makeGiottoObject.broken <- function(inputData, label, instructions=NULL)
 {
   # 1. Clean the HALO data
   out <- inputData
-
   message(paste0("Making the Giotto object for ", label))
 
   # 2. Create Object
   # Note: using Giotto:: prefix to ensure the package finds the function
-  sln <- Giotto::createGiottoObject(
-    expression = out$expr,
-    spatial_locs = out$locations,
-    instructions = instructions
-  )
+  sln <- Giotto::createGiottoObject(expression = out$expr,spatial_locs = out$locations,instructions = instructions)
 
   message("Adding cell metadata")
-  sln <- Giotto::addCellMetadata(
-    sln,
-    new_metadata = out$metadata,
-    by_column = TRUE,
-    column_cell_ID = "cellID"
-  )
+  sln <- Giotto::addCellMetadata(sln, new_metadata = out$metadata, by_column = TRUE, column_cell_ID = "cellID")
 
   # 3. Filter
   cell_metadata <- Giotto::pDataDT(sln)
@@ -95,16 +85,8 @@ makeGiottoObject <- function(inputData, label, instructions=NULL)
 
   # 4. Normalize
   message("Starting normalization")
-  sln <- Giotto::normalizeGiotto(
-    gobject = sln,
-    scalefactor = 6000,
-    norm_methods = "standard",
-    verbose = TRUE,
-    log_norm = FALSE,
-    library_size_norm = FALSE,
-    scale_genes = FALSE,
-    scale_cells = TRUE
-  )
+  sln <- Giotto::normalizeGiotto(gobject = sln, scalefactor = 6000, norm_methods = "standard", verbose = TRUE, log_norm = FALSE,
+    library_size_norm = FALSE, scale_feats = FALSE, scale_cells = TRUE)
   message("Finished normalization")
 
   sln <- Giotto::addStatistics(gobject = sln, expression_values = "normalized")

@@ -6,6 +6,7 @@
 #'
 #' @param halo.obj A data.frame or data.table read from a HALO csv file.
 #' @param label A character string to prefix cell IDs. Defaults to a random 5-letter string.
+#' @param saveColumns A character vector of column names to retain as metadata.
 #'
 #' @return A list containing:
 #' \itemize{

@@ -2,7 +2,7 @@ Package: ESImap
 Title: Spatial Analysis and Neighborhood Mapping for HALO Data
 Version: 0.1.0
 Authors@R: 
-    person("Ramin", "Herati", , "ramin.herati@nyulangone.org", role = c("aut", "cre"))
+    person("Ramin", "Herati", "ramin.herati@nyulangone.org", role = c("aut", "cre"))
 Description: A specialized toolset for processing HALO imaging data using Giotto. 
     It provides advanced workflows for data integration, niche composition analysis, 
     and neighborhood-dependent feature expression testing.
@@ -28,3 +28,5 @@ Suggests:
     devtools,
     usethis
 VignetteBuilder: knitr
+Remotes: 
+    github::drieslab/Giotto

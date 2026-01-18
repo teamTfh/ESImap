@@ -15,46 +15,37 @@
 #' }
 #' @import data.table
 #' @export
-cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""))
-{  
+cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""), saveColumns)
+{
   # Ensure input is a data.table
   if (!data.table::is.data.table(halo.obj)) {   data.table::setDT(halo.obj)   }
-  
+
   # Clean column names
   data.table::setnames(halo.obj, names(halo.obj), gsub(" ", ".", names(halo.obj)))
-  
+
   # Extract Expression Data
   cellIntensity <- grep("Cell.Intensity", names(halo.obj), value = TRUE)
   expr <- halo.obj[, .SD, .SDcols = cellIntensity]
   names(expr) <- gsub("\\.Cell.Intensity$", "", names(expr))
   rownames(expr) <- paste0(label, "_", halo.obj$Object.Id)
-  
+
   # Extract Locations
   locations <- data.table::data.table(
     x = rowMeans(halo.obj[, c('XMax', 'XMin'), with = FALSE]),
     y = rowMeans(halo.obj[, c('YMax', 'YMin'), with = FALSE])
   )
-  
+
   # Extract Metadata
-  # Note: 9:17 is specific to your file structure; ensure this is consistent across files
-  saveColumns <- c(
-    grep('Object.Id', colnames(halo.obj), value = TRUE),
-    grep('Classifier.Label', colnames(halo.obj), value = TRUE),
-    grep("Positive.Classification$", colnames(halo.obj), value = TRUE),
-    colnames(halo.obj)[9:17] 
-  )
-  
   metadata <- halo.obj[, .SD, .SDcols = saveColumns]
   metadata[, cellID := paste0(label, "_", Object.Id)]
-  metadata[, cellArea := `Cell.Area..µm..`]
   metadata[, x := locations$x]
   metadata[, y := locations$y]
-  
+
   # Clean NaNs
   for (j in seq_len(ncol(metadata))) {
     set(metadata, which(is.nan(metadata[[j]])), j, 0)
   }
-  
+
   return(list(expr = t(expr), metadata = metadata, locations = locations))
 }
 
@@ -76,9 +67,9 @@ makeGiottoObject <- function(inputFile, label, instructions=NULL)
 {
   # 1. Clean the HALO data
   out <- cleanHALO(inputFile, label)
-  
+
   message(paste0("Making the Giotto object for ", label))
-  
+
   # 2. Create Object
   # Note: using Giotto:: prefix to ensure the package finds the function
   sln <- Giotto::createGiottoObject(
@@ -86,7 +77,7 @@ makeGiottoObject <- function(inputFile, label, instructions=NULL)
     spatial_locs = out$locations,
     instructions = instructions
   )
-  
+
   message("Adding cell metadata")
   sln <- Giotto::addCellMetadata(
     sln,
@@ -94,12 +85,12 @@ makeGiottoObject <- function(inputFile, label, instructions=NULL)
     by_column = TRUE,
     column_cell_ID = "cellID"
   )
-  
+
   # 3. Filter
   cell_metadata <- Giotto::pDataDT(sln)
   keepID <- cell_metadata[Classifier.Label != "Background" & Classifier.Label != "Artifact", ]$cell_ID
   sln <- Giotto::subsetGiotto(sln, cell_ids = keepID)
-  
+
   # 4. Normalize
   message("Starting normalization")
   sln <- Giotto::normalizeGiotto(
@@ -113,9 +104,9 @@ makeGiottoObject <- function(inputFile, label, instructions=NULL)
     scale_cells = TRUE
   )
   message("Finished normalization")
-  
+
   sln <- Giotto::addStatistics(gobject = sln, expression_values = "normalized")
-  
+
   return(sln)
 }
 

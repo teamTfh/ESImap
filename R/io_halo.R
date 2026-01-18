@@ -16,7 +16,7 @@
 #' }
 #' @import data.table
 #' @export
-cleanHALO.broken <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""), saveColumns)
+cleanHALO <- function(halo.obj, label=paste0(sample(letters, 5, T), collapse = ""), saveColumns)
 {
   # Ensure input is a data.table
   if (!data.table::is.data.table(halo.obj)) {   data.table::setDT(halo.obj)   }
@@ -65,7 +65,7 @@ cleanHALO.broken <- function(halo.obj, label=paste0(sample(letters, 5, T), colla
 #' @return A processed Giotto object.
 #' @import Giotto
 #' @export
-makeGiottoObject.broken <- function(inputData, label, instructions=NULL)
+makeGiottoObject <- function(inputData, label, instructions=NULL)
 {
   # 1. Clean the HALO data
   out <- inputData

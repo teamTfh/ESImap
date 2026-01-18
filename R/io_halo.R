@@ -58,7 +58,7 @@ cleanHALO.broken <- function(halo.obj, label=paste0(sample(letters, 5, T), colla
 #'
 #' Wraps the cleaning, creation, filtering, and normalization steps into one pipeline.
 #'
-#' @param inputFile A raw data.table or data.frame from HALO.
+#' @param inputData A raw data.table or data.frame from HALO.
 #' @param label A character string for the sample name.
 #' @param instructions A list of Giotto instructions (created via \code{Giotto::createGiottoInstructions}).
 #'

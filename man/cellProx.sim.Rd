@@ -20,9 +20,9 @@ cellProx.sim(
 \arguments{
 \item{gobject}{A Giotto object.}
 
-\item{spat_unit}{Spatial unit to use (default: NULL, uses default).}
+\item{spat_unit}{Spatial unit to use (default: NULL).}
 
-\item{feat_type}{Feature type to use (default: NULL, uses default).}
+\item{feat_type}{Feature type to use (default: NULL).}
 
 \item{spatial_network_name}{Name of the spatial network to use (e.g., "spatialknn.k5").}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/neighborhood_viz.R
 \name{plotNeighborHistogram}
 \alias{plotNeighborHistogram}
-\title{Plot Neighbor-Dependent Feature Expression}
+\title{Plot Neighbor-Dependent Feature Expression Histogram}
 \usage{
 plotNeighborHistogram(
   gobject,
@@ -27,9 +27,8 @@ plotNeighborHistogram(
 \item{title}{Plot title.}
 }
 \value{
-A list containing the plot and the p-value.
+A ggplot rendering framework.
 }
 \description{
 Compares feature expression in cells with neighbors of type X vs those without.
-Requires a Giotto object to retrieve expression data.
 }

@@ -17,5 +17,5 @@ plotInteractionEffectSizes(df, condition.exp, condition.ctrl)
 A ggplot object.
 }
 \description{
-Visualizes the output of `calculateInteractionEffectSizes` as a bar chart.
+Visualizes calculated cell-cell affinity effect size metrics as a dot/bar plot.
 }

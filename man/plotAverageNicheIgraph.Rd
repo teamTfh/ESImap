@@ -24,7 +24,7 @@ plotAverageNicheIgraph(
 \item{top_n}{Integer. Number of top neighbors to display (default: 8).}
 }
 \value{
-A ggraph object.
+A ggraph visualization layout framework object.
 }
 \description{
 Visualizes the top neighbors of a specific cell type as a star-like network graph using `ggraph`.

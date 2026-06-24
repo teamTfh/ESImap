@@ -18,11 +18,11 @@ permutation.test.neighborhoods(
 
 \item{group.1}{Label for the second group (e.g., "Neighbors").}
 
-\item{num.permutations}{Integer, number of permutations.}
+\item{num.permutations}{Integer, number of permutations (default: 10000).}
 }
 \value{
-The calculated p-value.
+The calculated two-tailed p-value.
 }
 \description{
-Tests if a specific feature (gene/protein) is differentially expressed in cells that have neighbors of a certain type vs those that don't.
+Tests if a specific feature expression profile shifts significantly in response to close spatial neighbors.
 }

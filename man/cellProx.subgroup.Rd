@@ -9,11 +9,11 @@ cellProx.subgroup(dt, number_of_simulations = 200)
 \arguments{
 \item{dt}{A data.table containing combined simulation results from multiple samples (must have `id`, `unified_int`, `round`, `V1` columns).}
 
-\item{number_of_simulations}{Integer.}
+\item{number_of_simulations}{Integer, matches prior permutation depth (default: 200).}
 }
 \value{
 A list from \code{cellProx.calcP}.
 }
 \description{
-Aggregates results from multiple samples (rbind-ed tableResults) and calculates overall enrichment.
+Aggregates results from multiple samples and calculates subgroup-wide overall enrichment metrics.
 }

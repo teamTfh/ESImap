@@ -27,7 +27,7 @@ showNicheSingleSample(
 \item{plot_type}{Character. "lollipop" or "stacked".}
 }
 \value{
-A ggplot object or a data.table.
+A ggplot object or a data.table summary tracking distribution properties.
 }
 \description{
 Creates a lollipop chart or stacked bar chart showing the composition of neighbors for a specific cell type in one sample.

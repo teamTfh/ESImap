@@ -31,5 +31,5 @@ A list containing:
 }
 }
 \description{
-Takes the raw simulation table from \code{cellProx.sim} and calculates p-values and enrichment scores.
+Takes the raw simulation table from \code{cellProx.sim} and calculates empirical p-values and enrichment scores.
 }

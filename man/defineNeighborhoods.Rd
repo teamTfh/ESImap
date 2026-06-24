@@ -7,15 +7,10 @@
 defineNeighborhoods(annot.list)
 }
 \arguments{
-\item{annot.list}{A list of annotated spatial networks (output of `annotateSpatialNetwork` loop).}
+\item{annot.list}{A list of annotated spatial networks.}
 }
 \value{
-A list containing:
-\itemize{
-  \item \code{prop.table}: List of data.tables (one per sample) with neighbor proportions.
-  \item \code{raw.table}: List of raw count matrices.
-  \item \code{list_ID}: Vector of sample IDs.
-}
+A list containing proportion tables, raw counts, and tracking sample IDs.
 }
 \description{
 Calculates the proportion of cell types in the neighborhood of every cell.

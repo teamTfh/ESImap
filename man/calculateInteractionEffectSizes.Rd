@@ -13,7 +13,7 @@ calculateInteractionEffectSizes(
 )
 }
 \arguments{
-\item{interaction.dt}{A data.table containing enrichment results (output of `cellProx.subgroup` for multiple samples). Must have `condition`, `enrichm`, `unified_int`.}
+\item{interaction.dt}{A data.table containing enrichment results (must have `condition`, `enrichm`, `unified_int`).}
 
 \item{condition.exp}{Experimental condition string (e.g. "stage3").}
 
@@ -27,5 +27,5 @@ calculateInteractionEffectSizes(
 A data.table of interactions sorted by effect size.
 }
 \description{
-Compares interaction enrichment between two conditions (e.g., Stage 3 vs Stage 1).
+Compares interaction enrichment between two conditions using a standardized Cohen's d-like score.
 }

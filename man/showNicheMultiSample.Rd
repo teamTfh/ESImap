@@ -13,7 +13,7 @@ showNicheMultiSample(
 )
 }
 \arguments{
-\item{annot.list}{A list of annotated spatial network tables (output of `annotateSpatialNetwork`).}
+\item{annot.list}{A list of annotated spatial network tables.}
 
 \item{indexCluster}{Character string. The "center" cell type.}
 
@@ -24,7 +24,7 @@ showNicheMultiSample(
 \item{color_vector}{Named character vector of colors.}
 }
 \value{
-A ggplot object (dot plot with error bars) or a summary data.table.
+A ggplot object or summary reference table framework.
 }
 \description{
 Aggregates niche composition across multiple biological replicates and plots the mean proportions.
